@@ -22,10 +22,11 @@
         
     </div>
         <script type="text/javascript">
+            //sum all the elements of a list
             function sumArrayNum(list) {
                 return list.reduce((acc, a)=> acc+a, 0);
             }
-
+            //check whether all weights between 1 and 40 are to be weighed with the producing stones
             function checkWeight(weighRocks, maxWeight) {                
 
                for (let curWeight = 1; curWeight < maxWeight; curWeight++) {
@@ -35,7 +36,7 @@
                 }
                 return true;
             }
-
+            // check if a list of stones makes sense to compare the two weighing scales
             function findScalesRocks(leftScale, rightScale, restWeights) {
                 if(restWeights.length == 0){
                     
@@ -68,6 +69,7 @@
                 }
                 return false;
             }
+            //Disassemble the stone into four parts and save it as a list to check if it is the list you are looking for if yes return it
             function divider(maxWeight) {
                 for (let s0 = 1; s0 < maxWeight; s0++) {
                     for (let s1 = s0+1; s1 < maxWeight-s0; s1++) {
@@ -83,7 +85,7 @@
                 }
             }
             
-
+            //takes the input as a number and displays it in the HTML page. if other than an integer number has been entered, it reports an //error
             function onCalculate() {
                 let resultElement = document.querySelector('#result');
                 let msgElement = document.querySelector('#message');
