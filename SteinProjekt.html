@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+ <html lang="de">
+   <head>
+      <meta charset="utf-8">
+      <title>Stein</title>
+   </head>
+   <body>
+    <div style="display: flex; flex-direction: column; justify-content: center; padding: 3em; align-items: center; ">
+        <h1 >Coding Challenge</h1>
+        <img src="https://www.saticon.de/wp-content/uploads/2020/05/balkenwaage-1536x864.jpg" alt="Waage" width="360">
+        <p style="text-align: justify; background-color: seashell;text-shadow: darkblue; padding: 3em; border-radius: 10px;"> Angenommen, Sie haben einen 40 kg schweren Stein und verfügen über Werkzeuge, um ihn nach Bedarf zu teilen. Nun besteht Ihre Aufgabe darin, diesen Stein in 4 Stücke zu schneiden, so dass Sie nur mit diesen 4 Stücken und einer zweiseitigen Waagschale ein beliebiges Gewicht zwischen 1 kg und 40 kg abwiegen können. (Sie sollten in der Lage sein, jedes Gewicht von 1 kg, 2 kg, 3 kg bis zu 40 kg abzuwiegen) </p>
+        <div style="font-size: 1.5em;">
+            <label for="rockWeightInput">Stein gewicht:</label>
+            <input type="number" placeholder="eg: 40" id="rockWeightInput">
+            <button type="button" onclick="onCalculate()">Calculate</button>
+        </div>
+        <div style="width: 50%; padding: 1.5em; font-size: 1.5em; text-align: center">
+            <span id="result" style="color: blue;"></span>
+            <span id="message" style="color: red;"></span>
+        </div>
+
+        
+    </div>
+        <script type="text/javascript">
+            function sumArrayNum(list) {
+                return list.reduce((acc, a)=> acc+a, 0);
+            }
+
+            function checkWeight(weighRocks, maxWeight) {                
+
+               for (let curWeight = 1; curWeight < maxWeight; curWeight++) {
+                    if (!findScalesRocks([curWeight], [], weighRocks)) {
+                        return false;
+                    }                      
+                }
+                return true;
+            }
+
+            function findScalesRocks(leftScale, rightScale, restWeights) {
+                if(restWeights.length == 0){
+                    
+                    return sumArrayNum(leftScale) === sumArrayNum(rightScale);
+
+                }
+                if (sumArrayNum(leftScale) === sumArrayNum(rightScale)){
+                    
+                    return true;
+                }
+                for (const currentWeightIdx in restWeights) {
+                    const currentWeight = restWeights[currentWeightIdx];
+                    let newRestWeights = [...restWeights];
+                    newRestWeights.splice(currentWeightIdx, 1);
+
+                    let leftScaleCpy = [...leftScale];
+                    leftScaleCpy.push(currentWeight);
+
+                    let rightScaleCpy = [...rightScale];
+                    rightScaleCpy.push(currentWeight);
+
+                    if(leftScaleCpy.length <= 4) {
+                        if(findScalesRocks(leftScaleCpy, rightScale, newRestWeights))
+                            return true;
+                    }
+                    if(rightScaleCpy.length <= 4) {
+                        if(findScalesRocks(leftScale, rightScaleCpy, newRestWeights))
+                            return true;
+                    }                    
+                }
+                return false;
+            }
+            function divider(maxWeight) {
+                for (let s0 = 1; s0 < maxWeight; s0++) {
+                    for (let s1 = s0+1; s1 < maxWeight-s0; s1++) {
+                        for (let s2 = s1+1; s2< maxWeight-s0-s1; s2++) {
+                            let s3 = maxWeight - s0 - s1 - s2;
+                            let ret = [s0, s1, s2, s3];
+                            if (checkWeight(ret, maxWeight)) {
+                                return ret;
+                            }
+                        }
+                    }
+                    return [];
+                }
+            }
+            
+
+            function onCalculate() {
+                let resultElement = document.querySelector('#result');
+                let msgElement = document.querySelector('#message');
+                resultElement.innerHTML = "";
+                msgElement.innerHTML = "";
+                let rockWeight = document.querySelector('#rockWeightInput').value;
+                if (Number.isNaN(rockWeight)) {
+                    msgElement.innerHTML = "Please enter Integer number!";
+                } 
+                else {
+                    const ret = divider(Number.parseInt(rockWeight));
+                    if(ret.length > 0) {
+                        let str = ret.reduce((acc, a)=> acc+a+', ', '');
+                        resultElement.innerHTML = str.substr(0, str.length-2);
+                    }
+                    else {
+                        msgElement.innerHTML = "Not found";
+                    }
+                }
+            }
+        </script>
+    </body>  
+</html>
